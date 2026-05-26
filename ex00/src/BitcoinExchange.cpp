@@ -6,7 +6,7 @@
 /*   By: mchemari <mchemari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/26 13:55:47 by mchemari          #+#    #+#             */
-/*   Updated: 2026/05/26 16:49:19 by mchemari         ###   ########.fr       */
+/*   Updated: 2026/05/26 17:38:29 by mchemari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,12 @@ static void check_input_date(std::string str)
 	size_t pos = str.find('|');
 	if (pos == std::string::npos)
 	{
-		std::cout << "Bad input => |." << std::endl;
+		std::cout << "Bad input => '|'." << std::endl;
+		return;
+	}
+	if (str[pos - 1] != ' ' || str[pos + 1] != ' ')
+	{
+		std::cout << "Bad input => ' '." << std::endl;
 		return;
 	}
 
