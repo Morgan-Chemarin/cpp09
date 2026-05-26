@@ -6,7 +6,7 @@
 /*   By: mchemari <mchemari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/26 13:55:47 by mchemari          #+#    #+#             */
-/*   Updated: 2026/05/26 16:30:43 by mchemari         ###   ########.fr       */
+/*   Updated: 2026/05/26 16:49:19 by mchemari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,22 +59,49 @@ BitcoinExchange::~BitcoinExchange()
 {
 }
 
-void BitcoinExchange::processInput(const std::string &filename)
+static void check_input_date(std::string str)
 {
-	// recup chaque ligne, check et sortir de _data
-	
-	(void)filename;
+	size_t pos = str.find('|');
+	if (pos == std::string::npos)
+	{
+		std::cout << "Bad input => |." << std::endl;
+		return;
+	}
+
+	// soit split date / valeur
+
+	//! DATE
+	// following format: Year-Month-Day
+	// day 1-31 selon le mois
+	// month 1-12
+	// years ?? > 2026 ?
+	// bisextile
+
+	//! VALUE
+	// loat or a positive integer, between 0 and 1000
 }
 
+void BitcoinExchange::processInput(const std::string &filename)
+{
+	std::ifstream file(filename.c_str());
+	std::string	str;
+	
+	if (!file.is_open())
+	{
+		// error no file open
+		return;
+	}
+	std::getline(file, str); // check == "date | value"
+	while (std::getline(file, str))
+	{
+		check_input_date(str); // return value
+		
+	}
+	file.close();
+}
 
 
 // scores.insert(std::make_pair("Bob", 21));
 // scores.find("Charlie")
 
 
-// std::map<std::string, float>::const_iterator it = _data.begin();
-// while (it != _data.end())
-// {
-// 	std::cout << "Key = " << it->first << " / Value = " << it->second << std::endl;
-// 	it++;
-// }

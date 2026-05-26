@@ -6,7 +6,7 @@
 /*   By: mchemari <mchemari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/26 13:55:45 by mchemari          #+#    #+#             */
-/*   Updated: 2026/05/26 16:31:52 by mchemari         ###   ########.fr       */
+/*   Updated: 2026/05/26 16:34:31 by mchemari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ int main(int ac, char **av)
 	}
 	BitcoinExchange btc;
 	btc.processInput(av[1]);
-	
 }
 
 // lowerbound on map
