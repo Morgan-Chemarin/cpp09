@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   BitcoinExchange.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mchemari <mchemari@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dev <dev@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/26 13:55:47 by mchemari          #+#    #+#             */
-/*   Updated: 2026/05/26 17:38:29 by mchemari         ###   ########.fr       */
+/*   Updated: 2026/05/27 13:11:12 by dev              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,18 +15,19 @@
 #include <string>
 #include <iostream>
 #include <cstdlib>
+#include <cctype>
 
 BitcoinExchange::BitcoinExchange()
 {
 	std::ifstream file("data.csv");
 	std::string	str;
-	char **endptr = NULL;
+	char *endptr;
 	std::string date;
 	float value;
 
 	if (!file.is_open())
 	{
-		// error no file open
+		std::cout << "Error: file not open." << std::endl;
 		return;
 	}
 	std::getline(file, str);
@@ -36,7 +37,7 @@ BitcoinExchange::BitcoinExchange()
 		if (pos != std::string::npos)
 		{
 			date = str.substr(0, pos);
-			value = static_cast<float>(std::strtod((str.substr(pos + 1)).c_str(), endptr));
+			value = static_cast<float>(std::strtod((str.substr(pos + 1)).c_str(), &endptr));
 			_data[date] = value;
 		}
 	}
@@ -59,7 +60,7 @@ BitcoinExchange::~BitcoinExchange()
 {
 }
 
-static void check_input_date(std::string str)
+static void check_input(std::string str)
 {
 	size_t pos = str.find('|');
 	if (pos == std::string::npos)
@@ -67,13 +68,20 @@ static void check_input_date(std::string str)
 		std::cout << "Bad input => '|'." << std::endl;
 		return;
 	}
-	if (str[pos - 1] != ' ' || str[pos + 1] != ' ')
+	if (pos == 0 || str[pos - 1] != ' ' || str[pos + 1] != ' ')
 	{
 		std::cout << "Bad input => ' '." << std::endl;
 		return;
 	}
-
-	// soit split date / valeur
+	
+	char *end;
+	std::string date = str.substr(0, pos - 1);
+	float value = std::strtof(str.substr(pos + 1).c_str(), &end);
+	// std::cout << date << " : " << value << std::endl;
+	if (*end != '\0' && !std::isspace(*end)) {
+        std::cout << "Error: bad input (value) => " << str.substr(pos + 1) << std::endl;
+        return;
+    }
 
 	//! DATE
 	// following format: Year-Month-Day
@@ -81,9 +89,23 @@ static void check_input_date(std::string str)
 	// month 1-12
 	// years ?? > 2026 ?
 	// bisextile
+	if (check_valide_date())
+	{
+		// 
+		return;
+	}
 
 	//! VALUE
 	// loat or a positive integer, between 0 and 1000
+	if (value < 0 || value > 1000)
+	{
+		//
+		return; 
+	}
+	
+	// trouver la bonne date où celle dessous
+	// add check_input dans la class ou arg
+	// btc->_data[date] * value;
 }
 
 void BitcoinExchange::processInput(const std::string &filename)
@@ -93,13 +115,13 @@ void BitcoinExchange::processInput(const std::string &filename)
 	
 	if (!file.is_open())
 	{
-		// error no file open
+		std::cout << "Error: file not open." << std::endl;
 		return;
 	}
 	std::getline(file, str); // check == "date | value"
 	while (std::getline(file, str))
 	{
-		check_input_date(str); // return value
+		check_input(str); // return value
 		
 	}
 	file.close();

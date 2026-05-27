@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mchemari <mchemari@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dev <dev@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/26 13:55:45 by mchemari          #+#    #+#             */
-/*   Updated: 2026/05/26 16:34:31 by mchemari         ###   ########.fr       */
+/*   Updated: 2026/05/27 12:58:16 by dev              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 
 int main(int ac, char **av)
 {
-	if (ac != 1)
+	if (ac != 2)
 	{
-		std::cout << "Error: could not open file." << std::endl;
+		std::cout << "Error: ./btc 'inputFile.txt'" << std::endl;
 		return 0;
 	}
 	BitcoinExchange btc;
