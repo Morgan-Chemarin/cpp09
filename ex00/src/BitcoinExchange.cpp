@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   BitcoinExchange.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dev <dev@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: mchemari <mchemari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/26 13:55:47 by mchemari          #+#    #+#             */
-/*   Updated: 2026/05/27 13:11:12 by dev              ###   ########.fr       */
+/*   Updated: 2026/05/28 17:56:01 by mchemari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,48 @@ BitcoinExchange::~BitcoinExchange()
 {
 }
 
-static void check_input(std::string str)
+static bool is_leap(int year)
+{
+	if ((year % 4 == 0 && (year % 100 != 0 || year % 400 == 0)))
+		return true;
+	return false;
+}
+
+static bool check_valide_date(std::string date)
+{
+	if (date.length() != 10 || date[4] != '-' || date[7] != '-') {
+        std::cerr << "Error: bad input => " << date << std::endl;
+        return false;
+    }
+
+    int year = std::atoi(date.substr(0, 4).c_str());
+    int month = std::atoi(date.substr(5, 2).c_str());
+    int day = std::atoi(date.substr(8, 2).c_str());
+	int daysInMonth[] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+
+    if (month == 2 && is_leap(year)) {
+        daysInMonth[1] = 29;
+    }
+
+	if (day > daysInMonth[month] || day < 1)
+	{
+		std::cout << "Error input (date) => day" << std::endl;
+		return false;
+	}
+	if (month < 1 || month > 12)
+	{
+		std::cout << "Error input (date) => month" << std::endl;
+		return false;
+	}
+	if (year > 2026)
+	{
+		std::cout << "Error input (date) => year" << std::endl;
+		return false;
+	}
+	return true;
+}
+
+void BitcoinExchange::check_input(std::string str)
 {
 	size_t pos = str.find('|');
 	if (pos == std::string::npos)
@@ -77,35 +118,27 @@ static void check_input(std::string str)
 	char *end;
 	std::string date = str.substr(0, pos - 1);
 	float value = std::strtof(str.substr(pos + 1).c_str(), &end);
-	// std::cout << date << " : " << value << std::endl;
 	if (*end != '\0' && !std::isspace(*end)) {
         std::cout << "Error: bad input (value) => " << str.substr(pos + 1) << std::endl;
         return;
     }
 
 	//! DATE
-	// following format: Year-Month-Day
-	// day 1-31 selon le mois
-	// month 1-12
-	// years ?? > 2026 ?
-	// bisextile
-	if (check_valide_date())
-	{
-		// 
+	if (!check_valide_date(date))
 		return;
-	}
 
-	//! VALUE
-	// loat or a positive integer, between 0 and 1000
+	//! VALUE 	
 	if (value < 0 || value > 1000)
 	{
-		//
+		std::cout << "Bad input (value)" << std::endl;
 		return; 
 	}
 	
+	std::map<std::string, float>::iterator it;
 	// trouver la bonne date où celle dessous
-	// add check_input dans la class ou arg
-	// btc->_data[date] * value;
+	// test date inexistante
+	it = _data.lower_bound(date);
+	std::cout << it->first << " => " << value << " = " << it->second * value << std::endl;
 }
 
 void BitcoinExchange::processInput(const std::string &filename)
@@ -122,7 +155,6 @@ void BitcoinExchange::processInput(const std::string &filename)
 	while (std::getline(file, str))
 	{
 		check_input(str); // return value
-		
 	}
 	file.close();
 }

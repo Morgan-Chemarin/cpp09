@@ -6,7 +6,7 @@
 /*   By: mchemari <mchemari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/26 13:55:42 by mchemari          #+#    #+#             */
-/*   Updated: 2026/05/26 14:18:42 by mchemari         ###   ########.fr       */
+/*   Updated: 2026/05/28 17:49:30 by mchemari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ class BitcoinExchange
 		BitcoinExchange& operator=(const BitcoinExchange& other);
 		~BitcoinExchange();
 
+		void check_input(std::string str);
 		void processInput(const std::string &filename);
 	
 	private:
