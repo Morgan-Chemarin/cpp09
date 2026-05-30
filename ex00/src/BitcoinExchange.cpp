@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   BitcoinExchange.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mchemari <mchemari@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dev <dev@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/26 13:55:47 by mchemari          #+#    #+#             */
-/*   Updated: 2026/05/28 17:56:01 by mchemari         ###   ########.fr       */
+/*   Updated: 2026/05/30 12:16:31 by dev              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ static bool check_valide_date(std::string date)
         daysInMonth[1] = 29;
     }
 
-	if (day > daysInMonth[month] || day < 1)
+	if (day > daysInMonth[month - 1] || day < 1)
 	{
 		std::cout << "Error input (date) => day" << std::endl;
 		return false;
@@ -104,6 +104,7 @@ static bool check_valide_date(std::string date)
 void BitcoinExchange::check_input(std::string str)
 {
 	size_t pos = str.find('|');
+	// msg erreur plus precis
 	if (pos == std::string::npos)
 	{
 		std::cout << "Bad input => '|'." << std::endl;
@@ -128,17 +129,25 @@ void BitcoinExchange::check_input(std::string str)
 		return;
 
 	//! VALUE 	
+	// msg erreur plus precis
 	if (value < 0 || value > 1000)
 	{
 		std::cout << "Bad input (value)" << std::endl;
 		return; 
 	}
 	
-	std::map<std::string, float>::iterator it;
-	// trouver la bonne date où celle dessous
 	// test date inexistante
-	it = _data.lower_bound(date);
-	std::cout << it->first << " => " << value << " = " << it->second * value << std::endl;
+	std::map<std::string, float>::iterator it = _data.lower_bound(date);
+	if (it == _data.end() || it->first != date)
+	{
+		if (it == _data.begin())
+		{
+			std::cout <<"Error: no data available for dates before " << _data.begin()->first << std::endl;
+			return;
+		}
+		it--;
+	}
+	std::cout << date << " => " << value << " = " << it->second * value << std::endl;
 }
 
 void BitcoinExchange::processInput(const std::string &filename)
