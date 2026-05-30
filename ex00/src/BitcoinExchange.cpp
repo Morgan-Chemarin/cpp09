@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   BitcoinExchange.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dev <dev@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: mchemari <mchemari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/26 13:55:47 by mchemari          #+#    #+#             */
-/*   Updated: 2026/05/30 12:16:31 by dev              ###   ########.fr       */
+/*   Updated: 2026/05/30 15:53:22 by mchemari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,17 +85,17 @@ static bool check_valide_date(std::string date)
 
 	if (day > daysInMonth[month - 1] || day < 1)
 	{
-		std::cout << "Error input (date) => day" << std::endl;
+		std::cout << "Error : bad input => " << day << std::endl;
 		return false;
 	}
 	if (month < 1 || month > 12)
 	{
-		std::cout << "Error input (date) => month" << std::endl;
+		std::cout << "Error : bad input => " << month << std::endl;
 		return false;
 	}
 	if (year > 2026)
 	{
-		std::cout << "Error input (date) => year" << std::endl;
+		std::cout << "Error : bad input => " << year << std::endl;
 		return false;
 	}
 	return true;
@@ -103,46 +103,40 @@ static bool check_valide_date(std::string date)
 
 void BitcoinExchange::check_input(std::string str)
 {
-	size_t pos = str.find('|');
-	// msg erreur plus precis
-	if (pos == std::string::npos)
-	{
-		std::cout << "Bad input => '|'." << std::endl;
-		return;
-	}
-	if (pos == 0 || str[pos - 1] != ' ' || str[pos + 1] != ' ')
-	{
-		std::cout << "Bad input => ' '." << std::endl;
-		return;
-	}
-	
 	char *end;
+
+	size_t pos = str.find('|');
 	std::string date = str.substr(0, pos - 1);
 	float value = std::strtof(str.substr(pos + 1).c_str(), &end);
 	if (*end != '\0' && !std::isspace(*end)) {
-        std::cout << "Error: bad input (value) => " << str.substr(pos + 1) << std::endl;
+        std::cout << "Error: bad input => " << str.substr(pos + 1) << std::endl;
         return;
     }
 
-	//! DATE
+	if (pos == 0 || str[pos - 1] != ' ' || str[pos + 1] != ' ' || pos == std::string::npos)
+	{
+		std::cout << "Error: bad input => " << date << std::endl;
+		return;
+	}
 	if (!check_valide_date(date))
 		return;
-
-	//! VALUE 	
-	// msg erreur plus precis
-	if (value < 0 || value > 1000)
+	if (value < 0)
 	{
-		std::cout << "Bad input (value)" << std::endl;
+		std::cout << "Error: not a positive number." << std::endl;
+		return; 
+	}
+	if (value > 1000)
+	{
+		std::cout << "Error: too large a number." << std::endl;
 		return; 
 	}
 	
-	// test date inexistante
 	std::map<std::string, float>::iterator it = _data.lower_bound(date);
 	if (it == _data.end() || it->first != date)
 	{
 		if (it == _data.begin())
 		{
-			std::cout <<"Error: no data available for dates before " << _data.begin()->first << std::endl;
+			std::cout << "Error: no data available for dates before " << _data.begin()->first << std::endl;
 			return;
 		}
 		it--;
@@ -160,16 +154,10 @@ void BitcoinExchange::processInput(const std::string &filename)
 		std::cout << "Error: file not open." << std::endl;
 		return;
 	}
-	std::getline(file, str); // check == "date | value"
+	std::getline(file, str);
 	while (std::getline(file, str))
 	{
-		check_input(str); // return value
+		check_input(str);
 	}
 	file.close();
 }
-
-
-// scores.insert(std::make_pair("Bob", 21));
-// scores.find("Charlie")
-
-
