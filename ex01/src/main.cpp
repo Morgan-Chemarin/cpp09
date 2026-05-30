@@ -5,21 +5,23 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mchemari <mchemari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/26 13:55:45 by mchemari          #+#    #+#             */
-/*   Updated: 2026/05/30 15:54:42 by mchemari         ###   ########.fr       */
+/*   Created: 2026/05/30 16:08:45 by mchemari          #+#    #+#             */
+/*   Updated: 2026/05/30 17:25:50 by mchemari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "RPN.hpp"
 #include <iostream>
-#include "BitcoinExchange.hpp"
+#include <stack>
 
 int main(int ac, char **av)
 {
 	if (ac != 2)
 	{
-		std::cout << "Error: ./btc 'inputFile.txt'" << std::endl;
-		return 0;
+		std::cout << "Too many arguments : ./RPN \"8 9 *\"" << std::endl;
+		return 1;
 	}
-	BitcoinExchange btc;
-	btc.processInput(av[1]);
+	RPN rpn(av[1]);
+	rpn.calculate();
+	return 0;
 }

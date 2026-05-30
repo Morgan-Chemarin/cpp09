@@ -1,25 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   RPN.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mchemari <mchemari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/26 13:55:45 by mchemari          #+#    #+#             */
-/*   Updated: 2026/05/30 15:54:42 by mchemari         ###   ########.fr       */
+/*   Created: 2026/05/30 16:08:49 by mchemari          #+#    #+#             */
+/*   Updated: 2026/05/30 17:37:35 by mchemari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <iostream>
-#include "BitcoinExchange.hpp"
+#ifndef RPN_HPP
+#define RPN_HPP
 
-int main(int ac, char **av)
+#include <string>
+#include <stack>
+#include <iostream>
+
+class RPN
 {
-	if (ac != 2)
-	{
-		std::cout << "Error: ./btc 'inputFile.txt'" << std::endl;
-		return 0;
-	}
-	BitcoinExchange btc;
-	btc.processInput(av[1]);
-}
+	public:
+		RPN();
+		RPN(std::string str);
+		RPN(const RPN& other);
+		RPN& operator=(const RPN& other);
+		~RPN();
+
+		void calculate();
+	private:
+		std::string _input;
+		std::stack<int> _stack;
+};
+
+#endif
