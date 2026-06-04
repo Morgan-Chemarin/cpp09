@@ -6,7 +6,7 @@
 /*   By: mchemari <mchemari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/03 14:19:28 by mchemari          #+#    #+#             */
-/*   Updated: 2026/06/03 16:22:00 by mchemari         ###   ########.fr       */
+/*   Updated: 2026/06/04 17:34:25 by mchemari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,14 +34,14 @@ PmergeMe::~PmergeMe()
 
 void PmergeMe::process(int ac, char **av)
 {
-	if (parseInput(ac, av))
+	if (!parseInput(ac, av))
 		return;
 	sortVector();
 }
 
 static bool valid_number(std::string arg)
 {
-	for (size_t i = 0; i < arg.size() - 1; i++)
+	for (size_t i = 0; i < arg.size(); i++)
 	{
 		if (!isdigit(arg[i]))
 			return false;
@@ -62,7 +62,7 @@ bool PmergeMe::parseInput(int ac, char **av)
 		}
 		
 		long check_of = std::strtol(arg.c_str(), NULL, 10);
-		if (check_of > INT_MAX)
+		if (check_of > INT_MAX || check_of < 0)
 		{
 			std::cout << "Error : bad input : " << arg << std::endl;
 			return false;
@@ -74,19 +74,33 @@ bool PmergeMe::parseInput(int ac, char **av)
 
 void PmergeMe::sortVector()
 {
-	// std::vector<std::pair<int, int> > pairs;
+	//! FORD-JOHNSON ALGO
+	// 
+	// size impair on vire le dernier
+	if (_vect.size() % 2 == 1)
+	{
+		int impair = _vect.back(); // stocke dans la class ?
+		_vect.pop_back();
+		(void)impair;
+	}
+	// on met tout en paire
+	std::vector<std::pair<int, int> > pairs;
+	for (size_t i = 0; i < _vect.size(); i = i + 2)
+	{
+		pairs.push_back(std::make_pair(_vect[i], _vect[i + 1]));
+	}
+	// on met sur chaque paire individuelle le nombre le plus grand a droite 
+	// on trie ces pairs par rapport au plus grand ou plus petit (merge sorting / recursif)
+	// on separe en deux list (main / pend) mais on met deja le plus petit de pend dans main je crois
+	// avec jacosthal on insert pend dans main
+
+	std::cout << "--- Contenu de pairs ---" << std::endl;
+	for (std::vector<std::pair<int, int> >::const_iterator it = pairs.begin(); it != pairs.end(); ++it)
+	{
+		std::cout << "[ " << it->first << " , " << it->second << " ] ";
+	}
+	std::cout << std::endl << "------------------------" << std::endl;
 }
-
-//! FORD-JOHNSON ALGO
-// 
-// pairing
-// tri recursif
-// insertion avec suite de Jacobsthal
-// 
-
-
-
-
 
 
 // vector deque
