@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   PmergeMe.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dev <dev@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: mchemari <mchemari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/03 14:19:28 by mchemari          #+#    #+#             */
-/*   Updated: 2026/06/08 14:23:18 by dev              ###   ########.fr       */
+/*   Updated: 2026/06/08 18:52:24 by mchemari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,13 +66,57 @@ bool PmergeMe::parseInput(int ac, char **av)
 	return true;
 }
 
+void PmergeMe::mergePairs(std::vector<std::pair<int, int> >& pairs, int left, int mid, int right)
+{
+	std::vector<std::pair<int, int> > leftPart(pairs.begin() + left, pairs.begin() + mid + 1);
+	std::vector<std::pair<int, int> > rightPart(pairs.begin() + mid + 1, pairs.begin() + right + 1);
+
+	size_t i = 0;
+	size_t j = 0;
+	int k = left;
+	
+	// superpose pile assiette
+	while (i < leftPart.size() && j < rightPart.size())
+	{
+		if (leftPart[i].second <= rightPart[j].second)
+		{
+			pairs[k] = leftPart[i];
+			i++;
+		}
+		else
+		{
+			pairs[k] = rightPart[j];
+			j++;
+		}
+		k++;
+	}
+
+	// clean le morceaux non places
+	while (i < leftPart.size())
+	{
+		pairs[k] = leftPart[i];
+		k++;
+		i++;
+	}
+	while (j < rightPart.size())
+	{
+		pairs[k] = rightPart[j];
+		k++;
+		j++;
+	}
+}
+
 void PmergeMe::mergeSortPairs(std::vector<std::pair<int, int> >& pairs, int left, int right)
 {
-    // size < 2 on stop
+	if (left >= right)
+		return;
 
-	// deux appelle recursif pour gauche/droite
+	int mid = left + (right - left) / 2;
 
-    // fusionné les deux moitiés
+	mergeSortPairs(pairs, left, mid);
+	mergeSortPairs(pairs, mid + 1, right);
+
+	mergePairs(pairs, left, mid , right);
 }
 
 void PmergeMe::sortVector()
@@ -119,6 +163,7 @@ void PmergeMe::sortVector()
 		if (i > 0)
 			pend.push_back(pairs[i].first);
 	}
+	//? add straggler ?
 
 	// avec jacosthal on insert pend dans main
 	//! j'ai pas ça

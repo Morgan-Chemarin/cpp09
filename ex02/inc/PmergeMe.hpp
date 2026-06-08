@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   PmergeMe.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dev <dev@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: mchemari <mchemari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/03 14:19:24 by mchemari          #+#    #+#             */
-/*   Updated: 2026/06/08 14:20:34 by dev              ###   ########.fr       */
+/*   Updated: 2026/06/08 15:33:37 by mchemari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ class PmergeMe
 		std::vector<int> _vect;
 
         bool parseInput(int ac, char **av);
+		void mergePairs(std::vector<std::pair<int, int> >& pairs, int left, int mid, int right);
 		void mergeSortPairs(std::vector<std::pair<int, int> >& pairs, int left, int right);
 		void sortVector();
 };
