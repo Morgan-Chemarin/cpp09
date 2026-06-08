@@ -6,7 +6,7 @@
 /*   By: dev <dev@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/03 14:19:28 by mchemari          #+#    #+#             */
-/*   Updated: 2026/06/08 11:08:10 by dev              ###   ########.fr       */
+/*   Updated: 2026/06/08 14:23:18 by dev              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,19 +32,6 @@ PmergeMe::~PmergeMe()
 {
 }
 
-void PmergeMe::process(int ac, char **av)
-{
-	if (!parseInput(ac, av))
-        return;
-    fordJohnsonVector(0, _vect.size(), 1);
-
-    std::cout << "Vecteur trié : ";
-    for (size_t i = 0; i < _vect.size(); ++i) {
-        std::cout << _vect[i] << " ";
-    }
-    std::cout << std::endl;
-}
-
 static bool valid_number(std::string arg)
 {
 	if (arg.empty())
@@ -59,7 +46,6 @@ static bool valid_number(std::string arg)
 
 bool PmergeMe::parseInput(int ac, char **av)
 {
-	// ./PmergeMe 9 5 7
 	for (int i = 1; i < ac; i++)
 	{
 		std::string arg = av[i];
@@ -80,35 +66,78 @@ bool PmergeMe::parseInput(int ac, char **av)
 	return true;
 }
 
+void PmergeMe::mergeSortPairs(std::vector<std::pair<int, int> >& pairs, int left, int right)
+{
+    // size < 2 on stop
+
+	// deux appelle recursif pour gauche/droite
+
+    // fusionné les deux moitiés
+}
+
 void PmergeMe::sortVector()
 {
 	//! FORD-JOHNSON ALGO
 	// 
 	// size impair on vire le dernier
+	int straggler = -1;
+	bool hasStraggler = false;
+	
 	if (_vect.size() % 2 == 1)
 	{
-		int impair = _vect.back(); // stocke dans la class ?
+		straggler = _vect.back();
+		hasStraggler = true;
 		_vect.pop_back();
-		(void)impair;
 	}
+	(void)straggler;
+	(void)hasStraggler;
+	
 	// on met tout en paire
 	std::vector<std::pair<int, int> > pairs;
 	for (size_t i = 0; i < _vect.size(); i = i + 2)
-	{
 		pairs.push_back(std::make_pair(_vect[i], _vect[i + 1]));
-	}
-	// on met sur chaque paire individuelle le nombre le plus grand a droite 
-	// on trie ces pairs par rapport au plus grand ou plus petit (merge sorting / recursif)
-	// on separe en deux list (main / pend) mais on met deja le plus petit de pend dans main je crois
-	// avec jacosthal on insert pend dans main
-
-	std::cout << "--- Contenu de pairs ---" << std::endl;
-	for (std::vector<std::pair<int, int> >::const_iterator it = pairs.begin(); it != pairs.end(); ++it)
+	
+	// on met sur chaque paire individuelle le nombre le plus grand a droite
+	for (size_t i = 0; i < pairs.size(); i++)
 	{
-		std::cout << "[ " << it->first << " , " << it->second << " ] ";
+		if (pairs[i].first > pairs[i].second)
+			std::swap(pairs[i].first, pairs[i].second);
 	}
-	std::cout << std::endl << "------------------------" << std::endl;
+	
+	// on trie ces pairs par rapport au plus grand ou plus petit (merge sorting / recursif)
+	if (!pairs.empty())
+        mergeSortPairs(pairs, 0, pairs.size() - 1);
+
+	// on separe en deux list (main / pend) mais on met deja le plus petit de pend dans main je crois
+	std::vector<int> main_chain;
+	std::vector<int> pend;
+
+	main_chain.push_back(pairs[0].first);
+	for (size_t i = 0; i < pairs.size(); i++)
+	{
+		main_chain.push_back(pairs[i].second);
+		if (i > 0)
+			pend.push_back(pairs[i].first);
+	}
+
+	// avec jacosthal on insert pend dans main
+	//! j'ai pas ça
+
+	//? test
+	std::cout << "--- main_chain ---" << std::endl;
+	for (size_t i = 0; i < main_chain.size(); i++)
+		std::cout << main_chain[i] << " ";
+	std::cout << std::endl;
+
+	std::cout << "--- pend ---" << std::endl;
+	for (size_t i = 0; i < pend.size(); i++)
+		std::cout << pend[i] << " ";
+	std::cout << std::endl;
 }
 
-
-// vector deque
+void PmergeMe::process(int ac, char **av)
+{
+	if (!parseInput(ac, av))
+		return;
+	sortVector();
+}
