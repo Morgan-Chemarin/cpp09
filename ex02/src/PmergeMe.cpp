@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   PmergeMe.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mchemari <mchemari@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dev <dev@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/03 14:19:28 by mchemari          #+#    #+#             */
-/*   Updated: 2026/06/04 17:34:25 by mchemari         ###   ########.fr       */
+/*   Updated: 2026/06/08 11:08:10 by dev              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,20 @@ PmergeMe::~PmergeMe()
 void PmergeMe::process(int ac, char **av)
 {
 	if (!parseInput(ac, av))
-		return;
-	sortVector();
+        return;
+    fordJohnsonVector(0, _vect.size(), 1);
+
+    std::cout << "Vecteur trié : ";
+    for (size_t i = 0; i < _vect.size(); ++i) {
+        std::cout << _vect[i] << " ";
+    }
+    std::cout << std::endl;
 }
 
 static bool valid_number(std::string arg)
 {
+	if (arg.empty())
+		return false;
 	for (size_t i = 0; i < arg.size(); i++)
 	{
 		if (!isdigit(arg[i]))
@@ -69,7 +77,7 @@ bool PmergeMe::parseInput(int ac, char **av)
 		}
 		_vect.push_back(static_cast<int>(check_of));
 	}
-	return true; // ??
+	return true;
 }
 
 void PmergeMe::sortVector()
