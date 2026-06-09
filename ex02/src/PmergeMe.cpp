@@ -6,7 +6,7 @@
 /*   By: mchemari <mchemari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/03 14:19:28 by mchemari          #+#    #+#             */
-/*   Updated: 2026/06/09 16:32:45 by mchemari         ###   ########.fr       */
+/*   Updated: 2026/06/09 16:51:04 by mchemari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,9 +168,6 @@ void PmergeMe::binaryInsertVec(std::vector<int>& main_chain, int value)
 
 void PmergeMe::sortVector()
 {
-	//! FORD-JOHNSON ALGO
-	// 
-	// size impair on vire le dernier
 	int straggler = -1;
 	bool hasStraggler = false;
 	
@@ -188,7 +185,6 @@ void PmergeMe::sortVector()
 		return;
 	}
 	
-	// on met tout en paire / le plus grand a droite
 	std::vector<std::pair<int, int> > pairs;
 	for (size_t i = 0; i < _vect.size(); i = i + 2)
 		pairs.push_back(std::make_pair(_vect[i], _vect[i + 1]));
@@ -199,15 +195,14 @@ void PmergeMe::sortVector()
 			std::swap(pairs[i].first, pairs[i].second);
 	}
 	
-	// on trie ces pairs par rapport au plus grand ou plus petit (merge sorting / recursif)
 	if (!pairs.empty())
 		mergeSortPairsVec(pairs, 0, pairs.size() - 1);
 
-	// on separe en deux list (main / pend) mais on met deja le plus petit de pend dans main
 	std::vector<int> main_chain;
 	std::vector<int> pend;
 
-	main_chain.push_back(pairs[0].first); // si pairs est vidde
+	if (!pairs.empty())
+		main_chain.push_back(pairs[0].first);
 	for (size_t i = 0; i < pairs.size(); i++)
 	{
 		main_chain.push_back(pairs[i].second);
@@ -215,7 +210,6 @@ void PmergeMe::sortVector()
 			pend.push_back(pairs[i].first);
 	}
 
-	// avec jacosthal on insert pend dans main
 	std::vector<int> jacob_order = generateJacobstahle(pend.size());
 	
 	for (size_t i = 0; i < jacob_order.size(); i++)
@@ -344,7 +338,8 @@ void PmergeMe::sortDeque()
 	std::deque<int> main_chain;
 	std::deque<int> pend;
 
-	main_chain.push_back(pairs[0].first); // si pairs est vidde
+	if (!pairs.empty())
+		main_chain.push_back(pairs[0].first);
 	for (size_t i = 0; i < pairs.size(); i++)
 	{
 		main_chain.push_back(pairs[i].second);

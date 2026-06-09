@@ -6,7 +6,7 @@
 /*   By: mchemari <mchemari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/30 16:08:47 by mchemari          #+#    #+#             */
-/*   Updated: 2026/06/09 16:32:08 by mchemari         ###   ########.fr       */
+/*   Updated: 2026/06/09 16:57:56 by mchemari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void RPN::calculate()
 
 		if (isdigit(c))
 		{
-			if (i + 1 < _input.size() && isdigit(_input[i + 1])) { // a voir
+			if (i + 1 < _input.size() && isdigit(_input[i + 1])) {
 				std::cerr << "Error: numbers must be less than 10 and separated by spaces" << std::endl;
 				return;
 			}
@@ -68,7 +68,7 @@ void RPN::calculate()
 		{
 			if (_stack.size() < 2)
 			{
-				std::cerr << "Error: not enough numbers" << std::endl; // a voir
+				std::cerr << "Error: not enough numbers" << std::endl;
 				return;
 			}
 
