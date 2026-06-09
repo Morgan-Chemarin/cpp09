@@ -10,9 +10,9 @@ BLUE		=	\033[34m
 SRCS_FILES	=	main.cpp \
 				PmergeMe.cpp
 
-SRCS_DIR	=       src
+SRCS_DIR	=	src
 HEADERS_DIR	=	inc
-OBJ_DIR		=       obj
+OBJ_DIR		=	obj
 
 SRCS		=	$(addprefix $(SRCS_DIR)/, $(SRCS_FILES))
 OBJS		=	$(addprefix $(OBJ_DIR)/, $(SRCS_FILES:.cpp=.o))
