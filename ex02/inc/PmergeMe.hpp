@@ -6,7 +6,7 @@
 /*   By: mchemari <mchemari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/03 14:19:24 by mchemari          #+#    #+#             */
-/*   Updated: 2026/06/08 15:33:37 by mchemari         ###   ########.fr       */
+/*   Updated: 2026/06/09 02:24:55 by mchemari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include <cstdlib>
 #include <string>
 #include <climits>
+#include <algorithm>
 
 class PmergeMe
 {
@@ -32,11 +33,21 @@ class PmergeMe
 	
 	private:
 		std::vector<int> _vect;
+		std::deque<int> _deq;
 
-        bool parseInput(int ac, char **av);
-		void mergePairs(std::vector<std::pair<int, int> >& pairs, int left, int mid, int right);
-		void mergeSortPairs(std::vector<std::pair<int, int> >& pairs, int left, int right);
+		std::vector<int> generateJacobstahle(int size);
+
+		bool parseInputVec(int ac, char **av);
+		void mergePairsVec(std::vector<std::pair<int, int> >& pairs, int left, int mid, int right);
+		void mergeSortPairsVec(std::vector<std::pair<int, int> >& pairs, int left, int right);
+		void binaryInsertVec(std::vector<int>& main_chain, int value);
 		void sortVector();
+
+		bool parseInputDeq(int ac, char **av);
+		void mergePairsDeq(std::deque<std::pair<int, int> >& pairs, int left, int mid, int right);
+		void mergeSortPairsDeq(std::deque<std::pair<int, int> >& pairs, int left, int right);
+		void binaryInsertDeq(std::deque<int>& main_chain, int value);
+		void sortDeque();
 };
 
 #endif
