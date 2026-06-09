@@ -6,7 +6,7 @@
 /*   By: mchemari <mchemari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/30 16:08:47 by mchemari          #+#    #+#             */
-/*   Updated: 2026/06/09 03:35:01 by mchemari         ###   ########.fr       */
+/*   Updated: 2026/06/09 16:32:08 by mchemari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void RPN::calculate()
 		if (isdigit(c))
 		{
 			if (i + 1 < _input.size() && isdigit(_input[i + 1])) { // a voir
-				std::cout << "Error: numbers must be less than 10 and separated by spaces" << std::endl;
+				std::cerr << "Error: numbers must be less than 10 and separated by spaces" << std::endl;
 				return;
 			}
 			_stack.push(c - '0');
@@ -68,7 +68,7 @@ void RPN::calculate()
 		{
 			if (_stack.size() < 2)
 			{
-				std::cout << "Error: not enough numbers" << std::endl; // a voir
+				std::cerr << "Error: not enough numbers" << std::endl; // a voir
 				return;
 			}
 
@@ -84,7 +84,7 @@ void RPN::calculate()
 			{
 				if (a == 0)
 				{
-					std::cout << "Error: division by zero" << std::endl;
+					std::cerr << "Error: division by zero" << std::endl;
 					return;
 				}
 				result = b / a;
@@ -98,12 +98,12 @@ void RPN::calculate()
 		}
 		else
 		{
-			std::cout << "Error: invalid character" << std::endl;
+			std::cerr << "Error: invalid character" << std::endl;
 			return;
 		}
 	}
 	if (_stack.size() == 1)
 		std::cout << _stack.top() << std::endl;
 	else
-		std::cout << "Error: invalid expression" << std::endl;
+		std::cerr << "Error: invalid expression" << std::endl;
 }

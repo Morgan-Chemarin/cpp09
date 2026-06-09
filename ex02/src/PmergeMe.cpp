@@ -6,7 +6,7 @@
 /*   By: mchemari <mchemari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/03 14:19:28 by mchemari          #+#    #+#             */
-/*   Updated: 2026/06/09 03:16:45 by mchemari         ###   ########.fr       */
+/*   Updated: 2026/06/09 16:32:45 by mchemari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,14 +94,14 @@ bool PmergeMe::parseInputVec(int ac, char **av)
 		std::string arg = av[i];
 		if (!valid_number(arg))
 		{
-			std::cout << "Error : bad input : " << arg << std::endl;
+			std::cerr << "Error : bad input : " << arg << std::endl;
 			return false;
 		}
 		
 		long check_of = std::strtol(arg.c_str(), NULL, 10);
 		if (check_of > INT_MAX || check_of < 0)
 		{
-			std::cout << "Error : bad input : " << arg << std::endl;
+			std::cerr << "Error : bad input : " << arg << std::endl;
 			return false;
 		}
 		_vect.push_back(static_cast<int>(check_of));
