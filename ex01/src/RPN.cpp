@@ -6,7 +6,7 @@
 /*   By: mchemari <mchemari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/30 16:08:47 by mchemari          #+#    #+#             */
-/*   Updated: 2026/06/01 17:43:03 by mchemari         ###   ########.fr       */
+/*   Updated: 2026/06/09 03:35:01 by mchemari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,17 +51,24 @@ void RPN::calculate()
 {
 	for (size_t i = 0; i < _input.size(); i++)
 	{
-		if (_input[i] == ' ')
-			i++;
-		if (isdigit(_input[i]))
-			_stack.push(_input[i] - '0');
+		char c = _input[i];
+		
+		if (c == ' ')
+			continue;
 
-
+		if (isdigit(c))
+		{
+			if (i + 1 < _input.size() && isdigit(_input[i + 1])) { // a voir
+				std::cout << "Error: numbers must be less than 10 and separated by spaces" << std::endl;
+				return;
+			}
+			_stack.push(c - '0');
+		}
 		else if (isSymb(_input[i]))
 		{
 			if (_stack.size() < 2)
 			{
-				std::cout << "Error: not enough numbers" << std::endl;
+				std::cout << "Error: not enough numbers" << std::endl; // a voir
 				return;
 			}
 
@@ -74,7 +81,14 @@ void RPN::calculate()
 			if (_input[i] == '*')
 				result = b * a;
 			else if (_input[i] == '/')
+			{
+				if (a == 0)
+				{
+					std::cout << "Error: division by zero" << std::endl;
+					return;
+				}
 				result = b / a;
+			}
 			else if (_input[i] == '+')
 				result = b + a;
 			else if (_input[i] == '-')
@@ -89,7 +103,7 @@ void RPN::calculate()
 		}
 	}
 	if (_stack.size() == 1)
-        std::cout << _stack.top() << std::endl;
+		std::cout << _stack.top() << std::endl;
 	else
 		std::cout << "Error: invalid expression" << std::endl;
 }
