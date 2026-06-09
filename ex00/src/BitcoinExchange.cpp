@@ -6,7 +6,7 @@
 /*   By: mchemari <mchemari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/26 13:55:47 by mchemari          #+#    #+#             */
-/*   Updated: 2026/05/30 15:53:22 by mchemari         ###   ########.fr       */
+/*   Updated: 2026/06/09 03:53:12 by mchemari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,32 +70,33 @@ static bool is_leap(int year)
 static bool check_valide_date(std::string date)
 {
 	if (date.length() != 10 || date[4] != '-' || date[7] != '-') {
-        std::cerr << "Error: bad input => " << date << std::endl;
-        return false;
-    }
+		std::cout << "Error: bad input => " << date << std::endl;
+		return false;
+	}
 
-    int year = std::atoi(date.substr(0, 4).c_str());
-    int month = std::atoi(date.substr(5, 2).c_str());
-    int day = std::atoi(date.substr(8, 2).c_str());
+	int year = std::atoi(date.substr(0, 4).c_str());
+	int month = std::atoi(date.substr(5, 2).c_str());
+	int day = std::atoi(date.substr(8, 2).c_str());
+
+	if (month < 1 || month > 12)
+	{
+		std::cout << "Error: bad input => " << date << std::endl;
+		return false;
+	}
+
 	int daysInMonth[] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
-
-    if (month == 2 && is_leap(year)) {
-        daysInMonth[1] = 29;
-    }
+	if (month == 2 && is_leap(year)) {
+		daysInMonth[1] = 29;
+	}
 
 	if (day > daysInMonth[month - 1] || day < 1)
 	{
-		std::cout << "Error : bad input => " << day << std::endl;
-		return false;
-	}
-	if (month < 1 || month > 12)
-	{
-		std::cout << "Error : bad input => " << month << std::endl;
+		std::cout << "Error: bad input => " << date << std::endl;
 		return false;
 	}
 	if (year > 2026)
 	{
-		std::cout << "Error : bad input => " << year << std::endl;
+		std::cout << "Error: bad input => " << date << std::endl;
 		return false;
 	}
 	return true;
@@ -103,23 +104,30 @@ static bool check_valide_date(std::string date)
 
 void BitcoinExchange::check_input(std::string str)
 {
-	char *end;
-
 	size_t pos = str.find('|');
-	std::string date = str.substr(0, pos - 1);
-	float value = std::strtof(str.substr(pos + 1).c_str(), &end);
-	if (*end != '\0' && !std::isspace(*end)) {
-        std::cout << "Error: bad input => " << str.substr(pos + 1) << std::endl;
-        return;
-    }
 
-	if (pos == 0 || str[pos - 1] != ' ' || str[pos + 1] != ' ' || pos == std::string::npos)
+	if (pos == std::string::npos || pos < 1 || str[pos - 1] != ' ' || str[pos + 1] != ' ')
 	{
-		std::cout << "Error: bad input => " << date << std::endl;
+		std::cout << "Error: bad input => " << str << std::endl;
 		return;
 	}
+
+	std::string date = str.substr(0, pos - 1);
+	std::string value_str = str.substr(pos + 2);
+
 	if (!check_valide_date(date))
+	{
+		return ;
+	}
+
+	char *end;
+	float value = std::strtof(value_str.c_str(), &end);
+
+	if (end == value_str.c_str() || *end != '\0') {
+		std::cout << "Error: bad input => " << str << std::endl;
 		return;
+	}
+
 	if (value < 0)
 	{
 		std::cout << "Error: not a positive number." << std::endl;

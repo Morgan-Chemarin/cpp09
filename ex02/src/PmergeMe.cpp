@@ -6,7 +6,7 @@
 /*   By: mchemari <mchemari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/03 14:19:28 by mchemari          #+#    #+#             */
-/*   Updated: 2026/06/09 02:24:48 by mchemari         ###   ########.fr       */
+/*   Updated: 2026/06/09 03:16:45 by mchemari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -203,7 +203,7 @@ void PmergeMe::sortVector()
 	if (!pairs.empty())
 		mergeSortPairsVec(pairs, 0, pairs.size() - 1);
 
-	// on separe en deux list (main / pend) mais on met deja le plus petit de pend dans main je crois
+	// on separe en deux list (main / pend) mais on met deja le plus petit de pend dans main
 	std::vector<int> main_chain;
 	std::vector<int> pend;
 
@@ -371,11 +371,6 @@ void PmergeMe::sortDeque()
 
 void PmergeMe::process(int ac, char **av)
 {
-	std::cout << "Before: ";
-	for (int i = 1; i < ac; i++)
-		std::cout << av[i] << " ";
-	std::cout << std::endl;
-	
 	clock_t start_vec = clock();
 	if (!parseInputVec(ac, av))
 	{
@@ -391,6 +386,11 @@ void PmergeMe::process(int ac, char **av)
 	}
 	sortDeque();
 	clock_t end_deq = clock();
+
+	std::cout << "Before: ";
+	for (int i = 1; i < ac; i++)
+		std::cout << av[i] << " ";
+	std::cout << std::endl;
 
 	std::cout << "After:  ";
 	for (size_t i = 0; i < _vect.size(); i++)
